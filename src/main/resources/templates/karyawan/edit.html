@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Karyawan</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script>
+        function loadKabupaten() {
+            const provinsi = document.getElementById("provinsi").value;
+            const kabupatenDropdown = document.getElementById("kabupaten");
+            const selectedKabupaten = kabupatenDropdown.getAttribute("data-selected");
+
+            kabupatenDropdown.innerHTML = '<option value="">Pilih Kabupaten</option>';
+
+            if (!provinsi) return;
+
+            fetch(`/karyawan/api/kabupaten?provinsi=${encodeURIComponent(provinsi)}`)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(kabupaten => {
+                        const option = document.createElement("option");
+                        option.value = kabupaten;
+                        option.textContent = kabupaten;
+                        if (kabupaten === selectedKabupaten) {
+                            option.selected = true;
+                        }
+                        kabupatenDropdown.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            const selectedProvinsi = document.getElementById("provinsi").value;
+            if (selectedProvinsi) {
+                loadKabupaten();
+            }
+        });
+    </script>
+</head>
+<body>
+<h2>Edit Data Karyawan</h2>
+<form th:action="@{/karyawan/update/{id}(id=${karyawan.id})}" th:object="${karyawan}" method="post">
+    <label for="nik">NIK:</label>
+    <input type="text" id="nik" name="nik" th:value="*{nik}" required><br>
+
+    <label for="nama">Nama:</label>
+    <input type="text" id="nama" name="nama" th:value="*{nama}" required><br>
+
+    <label for="noHp">No. HP:</label>
+    <input type="text" id="noHp" name="noHp" th:value="*{noHp}"><br>
+
+    <label for="alamat">Alamat:</label>
+    <input type="text" id="alamat" name="alamat" th:value="*{alamat}"><br>
+
+    <label for="provinsi">Provinsi:</label>
+    <select id="provinsi" name="provinsi" onchange="loadKabupaten()">
+        <option value="">Pilih Provinsi</option>
+        <option value="Jawa Barat" th:selected="*{provinsi == 'Jawa Barat'}">Jawa Barat</option>
+        <option value="Jawa Timur" th:selected="*{provinsi == 'Jawa Timur'}">Jawa Timur</option>
+    </select><br>
+
+    <label for="kabupaten">Kabupaten:</label>
+    <select id="kabupaten" name="kabupaten" data-selected="*{kabupaten}">
+        <option value="">Pilih Kabupaten</option>
+    </select><br>
+
+    <button type="submit">Simpan</button>
+    <a href="/karyawan">Batal</a>
+</form>
+</body>
+</html>

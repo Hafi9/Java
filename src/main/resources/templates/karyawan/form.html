@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Form Karyawan</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script>
+        function loadKabupaten() {
+            const provinsi = document.getElementById("provinsi").value;
+            const kabupatenDropdown = document.getElementById("kabupaten");
+
+            kabupatenDropdown.innerHTML = '<option value="">Pilih Kabupaten</option>';
+
+            if (!provinsi) return;
+
+            fetch(`/karyawan/api/kabupaten?provinsi=${encodeURIComponent(provinsi)}`)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(kabupaten => {
+                        const option = document.createElement("option");
+                        option.value = kabupaten;
+                        option.textContent = kabupaten;
+                        kabupatenDropdown.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+<h2>New Data Karyawan</h2>
+<form method="post" th:action="@{/karyawan}">
+    <label for="nik">NIK:</label>
+    <input type="text" id="nik" name="nik" required><br>
+
+    <label for="nama">Nama:</label>
+    <input type="text" id="nama" name="nama" required><br>
+
+    <label for="noHp">No. HP:</label>
+    <input type="text" id="noHp" name="noHp"><br>
+
+    <label for="alamat">Alamat:</label>
+    <input type="text" id="alamat" name="alamat"><br>
+
+    <label for="provinsi">Provinsi:</label>
+    <select id="provinsi" name="provinsi" onchange="loadKabupaten()">
+        <option value="">Pilih Provinsi</option>
+        <option value="Jawa Barat">Jawa Barat</option>
+        <option value="Jawa Timur">Jawa Timur</option>
+    </select><br>
+
+    <label for="kabupaten">Kabupaten:</label>
+    <select id="kabupaten" name="kabupaten">
+        <option value="">Pilih Kabupaten</option>
+    </select><br>
+
+    <button type="submit">Save</button>
+</form>
+</body>
+</html>

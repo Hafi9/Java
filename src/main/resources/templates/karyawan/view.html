@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detail Karyawan</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<h2>Detail Data Karyawan</h2>
+<div>
+    <p><strong>NIK:</strong> <span th:text="${karyawan.nik}"></span></p>
+    <p><strong>Nama:</strong> <span th:text="${karyawan.nama}"></span></p>
+    <p><strong>No. HP:</strong> <span th:text="${karyawan.noHp}"></span></p>
+    <p><strong>Alamat:</strong> <span th:text="${karyawan.alamat}"></span></p>
+    <p><strong>Provinsi:</strong> <span th:text="${karyawan.provinsi}"></span></p>
+    <p><strong>Kabupaten:</strong> <span th:text="${karyawan.kabupaten}"></span></p>
+</div>
+<a href="/karyawan">Kembali ke Daftar</a>
+</body>
+</html>
